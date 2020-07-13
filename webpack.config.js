@@ -78,7 +78,7 @@ module.exports = {
                 parallel: true, //并行压缩
                 sourceMap: true //源码映射
             }),
-            // 対生成的css代码进行压缩，mode='production'是生效
+            // 対生成的css代码进行压缩，mode='production'时生效
             new optimizeCssAssetsWebpackPlugin()
         ]
     },
@@ -137,7 +137,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.scss$/,
+                test: /\.(scss|sass)$/,
                 include: [path.resolve(__dirname, 'src')],
                 exclude: /node_modules/,
                 use: [
@@ -195,7 +195,7 @@ module.exports = {
                         publicPath: '../images',
                         // 图片大小为48509b,只有设定的limit值小于48509时才会打包到dist/images文件夹。反之，则转化为base64编码字符串
                         // a.打包到dist/images文件夹下
-                        limit: 48500,
+                        limit: 500,
                         // b.打包成base64字符串
                         // limit: 48510,
                         name: '[hash:8]-[name].[ext]'

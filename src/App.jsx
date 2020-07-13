@@ -1,12 +1,13 @@
-//App组件
+//这是项目的根组件-App组件
 import React from 'react';
 // 导入路由相关组件
 import { HashRouter, Route, Link } from 'react-router-dom';
 // 导入需要的AntDesign组件
 import { Layout, Menu } from 'antd';
 const { Header, Content, Footer } = Layout;
-// 导入app.scss样式文件
-import styles from './css/app.scss';
+// 导入app.scss样式文件---两种方式：a.import ES6方式 b.common.js方式
+// import styles from './css/app.scss';
+require('./css/app.scss');
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,7 @@ export default class App extends React.Component {
         <Layout className="layout" style={{ height: '100%' }}>
           {/* 头部区域 */}
           <Header>
-            <div className={styles.logo}/>
+            <div className="logo"></div>
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
               <Menu.Item key="1">首页</Menu.Item>
               <Menu.Item key="2">电影</Menu.Item>
