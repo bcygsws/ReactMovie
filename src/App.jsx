@@ -1,7 +1,7 @@
 //这是项目的根组件-App组件
 import React from 'react';
 // 导入路由相关组件
-import { HashRouter, Route, Link, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Link } from 'react-router-dom';
 // 导入Home Movie About子组件
 import Home from './component/home/HomeContainer.jsx';
 import Movie from './component/movie/MovieContainer.jsx';
@@ -35,7 +35,7 @@ export default class App extends React.Component {
             <Menu
               theme="dark"
               mode="horizontal"
-              defaultSelectedKeys={[window.location.hash.split(' / ')[1]]}>
+              defaultSelectedKeys={["window.location.hash.split(' / ')[1]"]}>
               <Menu.Item key="home">
                 <Link to="/home">首页</Link>
               </Menu.Item>
