@@ -12,6 +12,7 @@ const { Header, Content, Footer } = Layout;
 // 导入app.scss样式文件---两种方式：a.import ES6方式 b.common.js方式
 // import styles from './css/app.scss';
 require('./css/app.scss');
+// import 'antd/dist/antd.min.css';
 export default class App extends React.Component {
   constructor(props) {
     super(props);

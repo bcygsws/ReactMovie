@@ -8,14 +8,18 @@ html-webpack-plugin包有两个作用：
 const htmlWebpackPlugin = require('html-webpack-plugin');
 // 打包前清除上次打包的文件夹 ---clean-webpack-plugin插件，webpack4以后需要使用结构赋值的方式声明，如const { CleanWebpackPlugin }
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin');
 /*
 mini-css-extract-plugin 分离css
-optimize-css-assets-webpack-plugin 压缩css
+optimize-css-assets-webpack-plugin 压缩css，mode:"production"时这个插件才生效
 */
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
+    // Providing the mode configuration option tells webpack to use its built-in optimizations(优化) accordingly.
+    mode: 'development',
+    // 生产环境下，对bundle.js文件大小有要求，且会压缩css代码的空字符
+    // mode: 'production',
     // resolve()方法把多个片段从右往左解析成绝对路径，如果拼接后还不是绝对路径，将自动叠加上当前目录
     // 绝对路径以 /开头
     entry: {
@@ -43,7 +47,7 @@ module.exports = {
                 removeAttributeQuotes: true //移除属性值的引号(并不是所有的引号都去掉，去掉引号会发生的错误的引号不会被移除)
             }
         }),
-        // 定义将src下的一个或者多个.css .less .sass(.scss)文件打包生成的一个css文件名
+        // 该插件的作用是把css从bundle.js中出来，定义将src下的一个或者多个.css .less .sass(.scss)文件打包生成的一个css文件名
         new miniCssExtractPlugin({
             // name是entry入口声明的文件名字，本配置中是app
             // 此处的filename会覆盖掉output中filename的声明 
@@ -54,7 +58,7 @@ module.exports = {
     optimization: { //bundle.js中只存放自己的包，把main.js中引入的第三方包抽离出来
         splitChunks: {
             // chunks 值为async：表示抽取异步模块 值为initial表示抽取同步模块 all:表示对所有模块生效
-            // chunks: 'all',
+            chunks: 'all',
             // 使用缓存组
             cacheGroups: {
                 vendors: { //抽离第三方插件
@@ -73,7 +77,8 @@ module.exports = {
             name: 'manifest'
         },
         minimizer: [
-            new UglifyJsPlugin({
+            // 用于js的代码压缩
+            new UglifyJsWebpackPlugin({
                 cache: true,
                 parallel: true, //并行压缩
                 sourceMap: true //源码映射
@@ -144,6 +149,7 @@ module.exports = {
                     { loader: miniCssExtractPlugin.loader },
                     // 'style-loader',
                     { loader: 'css-loader' },
+                    // 对浏览器兼容的css代码叫前缀，例如样式中需要-webkit -moz -o -ms兼容不同浏览器
                     { loader: 'postcss-loader' },
                     {
                         loader: 'sass-loader',
