@@ -15,6 +15,8 @@ optimize-css-assets-webpack-plugin 压缩css，mode:"production"时这个插件�
 */
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+// 解决跨域问题
+var proxy = require('http-proxy-middleware');
 module.exports = {
     // Providing the mode configuration option tells webpack to use its built-in optimizations(优化) accordingly.
     mode: 'development',

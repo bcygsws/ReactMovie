@@ -12,7 +12,7 @@ export default class MovieList extends React.Component {
       nowPage: parseInt(props.match.params.page) || 1, //当前所在的电影列表页码数
       pageSize: 14, //每一页显示多少条数据
       start: 0, //当前列表页条目开始的索引
-      isLoading: false, //电影列表呈现前的加载特效，是否在加载？
+      isLoading: true, //电影列表呈现前的加载特效，是否在加载？
       total: 0, //当前电影列表的总数量
     };
   }
@@ -51,6 +51,10 @@ export default class MovieList extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
+        // state值改变，要重新更新组件，将重新render函数
+        this.setState({
+          isLoading: false,
+        });
       });
   };
   render() {
