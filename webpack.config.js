@@ -79,9 +79,9 @@ module.exports = {
         minimizer: [
             // 用于js的代码压缩
             new UglifyJsWebpackPlugin({
-                cache: true,
-                parallel: true, //并行压缩
-                sourceMap: true //源码映射
+                cache: true, //启用缓存，还可以启用并设置缓存路径，如：cache: 'path/to/cache'
+                parallel: true, //启用多进程并行运行来提高构建速度
+                sourceMap: false //使用sourceMap将错误消息位置映射到模块(这会减慢编译速度)
             }),
             // 対生成的css代码进行压缩，mode='production'时生效
             new optimizeCssAssetsWebpackPlugin()

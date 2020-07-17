@@ -1,32 +1,65 @@
 import React from 'react';
+// 导入 【加载中】特效组件 Spin
+import { Spin, Alert } from 'antd';
 export default class MovieList extends React.Component {
   constructor(props) {
     super(props);
     // 注意问题：在this.state={params:props.match.params}来拿到路由参数会有问题，在切换正在热映 即将上映 和 top250三个路由时，需要手动刷新页面才能拿到路由数据。而在render生命周期钩子中可以直接拿到路由参数了，无需手动刷新页面
-    this.state = {};
+    this.state = {
+      movie: [], //电影列表
+      nowPage: parseInt(props.match.params.page) || 1, //当前所在的电影列表页码数
+      pageSize: 14, //每一页显示多少条数据
+      start: 0, //当前列表页条目开始的索引
+      isLoading: true, //电影列表呈现前的加载特效，是否在加载？
+      total: 0, //当前电影列表的总数量
+    };
   }
+  // ajax等数据请求在这个生命周期开始请求
   componentWillMount() {
     //   用老数据接口来测试发现，第一个.then拿不到数据，只是返回了一个promise,这个promise(response)调用.json()方法并返回，再次.then才能拿到数据
-    fetch('http://www.liulongbin.top:3005/api/getimgcategory')
-      .then((response) => {
-        //当使用fetch API获取数据时，第一个.then中是拿不到数据的，而是拿到了一个promise对象，我们可以调用promise.json()再次返回一个promise
-        console.log(response);
-        return response.json();//返回一个新的promise
-      })
-      .then((result) => {
-        console.log(result);
+    // fetch('http://www.liulongbin.top:3005/api/getimgcategory')
+    //   .then((response) => {
+    //     //当使用fetch API获取数据时，第一个.then中是拿不到数据的，而是拿到了一个promise对象，我们可以调用promise.json()再次返回一个promise
+    //     console.log(response);
+    //     return response.json();//返回一个新的promise
+    //   })
+    //   .then((result) => {
+    //     console.log(result);
+    //   });
+    // 用定时器模拟数据接口请求后的过程，假设1s后数据请求完成
+    setTimeout(() => {
+      this.setState({
+        isLoading:false
       });
+    }, 1000);
   }
   render() {
     return (
       <div>
-        <h1>
+        {/* <h1>
           这是MovieList组件---{this.props.match.params.type}---
           {this.props.match.params.page}
-        </h1>
+        </h1> */}
+        {this.renderList()}
       </div>
     );
   }
+  renderList = () => {
+    if (this.state.isLoading) {
+      //正在加载中，就放置 加载中组件
+      return (
+        <Spin tip="Loading...">
+          <Alert
+            message="正在请求电影列表"
+            description="精彩内容，马上呈现！"
+            type="info"
+          />
+        </Spin>
+      );
+    } else {
+      return <h1>请求获得的电影列表数据，加载完成了~~~</h1>;
+    }
+  };
 }
 // 获取数据的方式：
 // 在react中，我们使用fetch API来获取数据，fetch API是基于promise封装的
