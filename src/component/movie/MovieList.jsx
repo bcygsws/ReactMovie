@@ -1,6 +1,8 @@
 import React from 'react';
 // 导入 【加载中】特效组件 Spin
 import { Spin, Alert } from 'antd';
+// 导入fetch-jsonp
+import fetchJSONP from 'fetch-jsonp';
 export default class MovieList extends React.Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,7 @@ export default class MovieList extends React.Component {
       nowPage: parseInt(props.match.params.page) || 1, //当前所在的电影列表页码数
       pageSize: 14, //每一页显示多少条数据
       start: 0, //当前列表页条目开始的索引
-      isLoading: true, //电影列表呈现前的加载特效，是否在加载？
+      isLoading: false, //电影列表呈现前的加载特效，是否在加载？
       total: 0, //当前电影列表的总数量
     };
   }
@@ -27,12 +29,30 @@ export default class MovieList extends React.Component {
     //     console.log(result);
     //   });
     // 用定时器模拟数据接口请求后的过程，假设1s后数据请求完成
-    setTimeout(() => {
-      this.setState({
-        isLoading:false
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({
+    //     isLoading:false
+    //   });
+    // }, 1000);
+    this.loadMovieListByTypeAndPage();
   }
+  // 根据电影类型和页码获取数据
+  loadMovieListByTypeAndPage = () => {
+    // 请求不到数据，提示有跨域问题。为此，我们需要使用github上的第三方包
+    // 注意：默认的window.fetch受到跨域限制，无法直接使用，这时候使用第三方包，fetch-jsonp发送jsonp请求，它的用法和浏览器内置的fetch完全兼容
+    // fetch('http://api.douban.com/v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a').then(response=>{
+    //   return response.json();
+    // }).then(result=>{
+    //   console.log(result);
+    // });
+    fetchJSONP(
+      'http://api.douban.com/v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a',
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+      });
+  };
   render() {
     return (
       <div>
