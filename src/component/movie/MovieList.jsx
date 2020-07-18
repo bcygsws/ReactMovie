@@ -3,17 +3,21 @@ import React from 'react';
 import { Spin, Alert } from 'antd';
 // 导入fetch-jsonp
 import fetchJSONP from 'fetch-jsonp';
+// 导入电影显示区域组件MovieItem
+import MovieItem from './MovieItem.jsx';
 export default class MovieList extends React.Component {
   constructor(props) {
     super(props);
     // 注意问题：在this.state={params:props.match.params}来拿到路由参数会有问题，在切换正在热映 即将上映 和 top250三个路由时，需要手动刷新页面才能拿到路由数据。而在render生命周期钩子中可以直接拿到路由参数了，无需手动刷新页面
     this.state = {
-      movie: [], //电影列表
-      nowPage: parseInt(props.match.params.page) || 1, //当前所在的电影列表页码数
+      movies: [], //电影列表
+      // nowPage:2, //当前所在的电影列表页码数
+      nowPage: parseInt(props.match.params.page) || 1,
       pageSize: 14, //每一页显示多少条数据
       start: 0, //当前列表页条目开始的索引
       isLoading: true, //电影列表呈现前的加载特效，是否在加载？
       total: 0, //当前电影列表的总数量
+      movieType: props.match.params.type, //保存当前获取电影的内存
     };
   }
   // ajax等数据请求在这个生命周期开始请求
@@ -45,17 +49,31 @@ export default class MovieList extends React.Component {
     // }).then(result=>{
     //   console.log(result);
     // });
-    fetchJSONP(
-      'http://api.douban.com/v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a',
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        // state值改变，要重新更新组件，将重新render函数
-        this.setState({
-          isLoading: false,
-        });
+    // 1.适配不同类型的电影
+    // const start = (this.state.nowPage - 1) * this.state.pageSize;
+    // const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
+    // fetchJSONP(url)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     console.log(result);
+    //     // state值改变，要重新更新组件，将重新render函数
+    //     this.setState({
+    //       isLoading: false,//数据加载完成
+    //       movies: result.subjects,//为电影列表重新赋值
+    //       total: result.total,//电影列表中电影总条数
+    //     });
+    //   });
+
+    // 为避免超过appkey的使用次数，可以将拿到的数据存放.json文件中，作为测试使用
+    const data = require('../test_data/in_theaters.json');
+    // 用定时器模拟请求数据接口的时间
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+        movies: data.subjects,
+        total: data.total,
       });
+    }, 1000);
   };
   render() {
     return (
@@ -81,7 +99,11 @@ export default class MovieList extends React.Component {
         </Spin>
       );
     } else {
-      return <h1>请求获得的电影列表数据，加载完成了~~~</h1>;
+      return <div>{
+      this.state.movies.map((item)=>{
+        return <MovieItem {...item} key={item.id}></MovieItem>;
+      })
+      }</div>;
     }
   };
 }
