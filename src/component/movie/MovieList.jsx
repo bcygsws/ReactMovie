@@ -77,7 +77,7 @@ export default class MovieList extends React.Component {
   };
   render() {
     return (
-      <div>
+      <div style={{height:'100%'}}>
         {/* <h1>
           这是MovieList组件---{this.props.match.params.type}---
           {this.props.match.params.page}
@@ -99,7 +99,7 @@ export default class MovieList extends React.Component {
         </Spin>
       );
     } else {
-      return <div>{
+      return <div style={{width:'100%',display:'flex',flexDirection:'row',flexWrap:'wrap'}}>{
       this.state.movies.map((item)=>{
         return <MovieItem {...item} key={item.id}></MovieItem>;
       })

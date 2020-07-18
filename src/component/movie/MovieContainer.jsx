@@ -10,9 +10,7 @@ import MovieList from './MovieList.jsx';
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-     
-    };
+    this.state = {};
   }
   render() {
     return (
@@ -24,13 +22,13 @@ export default class Movie extends React.Component {
               defaultSelectedKeys={['1']}
               style={{ height: '100%', borderRight: 0 }}>
               <Menu.Item key="1">
-                <Link to="/movie/in_theaters/1">正在热映</Link>
+                <Link to="/movie/in_theaters/1"> 正在热映 </Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/movie/coming_soon/1">即将上映</Link>
+                <Link to="/movie/coming_soon/1"> 即将上映 </Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/movie/top250/1">Top250</Link>
+                <Link to="/movie/top250/1"> Top250 </Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -39,13 +37,16 @@ export default class Movie extends React.Component {
             <Content
               className="site-layout-background"
               style={{
-                padding: 10,
+                padding: 15,
                 margin: 0,
                 minHeight: 280,
                 backgroundColor: '#fff',
               }}>
+              
               {/* 在匹配路由规则中，有两个路由参数 */}
-              <Route path="/movie/:type/:page" component={MovieList}></Route>
+              <Route path="/movie/:type/:page" component={MovieList}>
+                
+              </Route>
             </Content>
           </Layout>
         </Layout>
