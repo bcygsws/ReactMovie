@@ -41,6 +41,7 @@ export default class Movie extends React.Component {
                 margin: 0,
                 minHeight: 280,
                 backgroundColor: '#fff',
+                height:'100%'
               }}>
               
               {/* 在匹配路由规则中，有两个路由参数 */}

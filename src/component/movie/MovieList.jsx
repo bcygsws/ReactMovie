@@ -77,7 +77,7 @@ export default class MovieList extends React.Component {
   };
   render() {
     return (
-      <div style={{height:'100%'}}>
+      <div style={{height:'100%',maxHeight:'735px',overflow:'auto'}}>
         {/* <h1>
           这是MovieList组件---{this.props.match.params.type}---
           {this.props.match.params.page}

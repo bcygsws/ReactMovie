@@ -6,13 +6,26 @@
     text-align: center;
     box-shadow: 0 0 6px #ddd;
     cursor: pointer;
-    transition: all .3;
+    transition: all 0.3 ease;
+    /* 考虑到评分条的位置出现不在同一水平线上，对box也设定flex布局 */
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
     >img {
         width: 100px;
         height: 140px;
+        vertical-align: bottom;
     }
     &:hover {
         transform: rotate(2deg) scale(1.03);
-        opacity: 0.9;
+        opacity: 0.7;
+    }
+    h4:nth-child(2) {
+        margin-top: 7px;
+        font: normal 700 16px 'Arial';
+    }
+    h4:last-child {
+        font: normal 400 15px '华文楷体';
     }
 }
