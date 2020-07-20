@@ -1,6 +1,6 @@
 import React from 'react';
 // 导入 【加载中】特效组件 Spin
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, Pagination } from 'antd';
 // 导入fetch-jsonp，可以避开fetch请求时，出现的跨域问题。但是jsonp这种方式只适用于get请求
 import fetchJSONP from 'fetch-jsonp';
 // 导入电影显示区域组件MovieItem
@@ -13,7 +13,7 @@ export default class MovieList extends React.Component {
       movies: [], //电影列表
       // nowPage:2, //当前所在的电影列表页码数
       nowPage: parseInt(props.match.params.page) || 1,
-      pageSize: 14, //每一页显示多少条数据
+      pageSize: 12, //每一页显示多少条数据
       start: 0, //当前列表页条目开始的索引
       isLoading: true, //电影列表呈现前的加载特效，是否在加载？
       total: 0, //当前电影列表的总数量
@@ -50,50 +50,53 @@ export default class MovieList extends React.Component {
     //   console.log(result);
     // });
     // 1.适配不同类型的电影
-    // const start = (this.state.nowPage - 1) * this.state.pageSize;
-    // const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
-    // fetchJSONP(url)
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //     // state值改变，要重新更新组件，将重新render函数
-    //     this.setState({
-    //       isLoading: false,//数据加载完成
-    //       movies: result.subjects,//为电影列表重新赋值
-    //       total: result.total,//电影列表中电影总条数
-    //     });
-    //   });
+    const start = (this.state.nowPage - 1) * this.state.pageSize;
+    const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
+    fetchJSONP(url)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        // state值改变，要重新更新组件，将重新render函数
+        this.setState({
+          isLoading: false, //数据加载完成
+          movies: result.subjects, //为电影列表重新赋值
+          total: result.total, //电影列表中电影总条数
+        });
+      });
 
     // 为避免超过appkey的使用次数，可以将拿到的数据存放.json文件中，作为测试使用
-    const data = require(`../test_data/${this.state.movieType}.json`);
-    // 用定时器模拟请求数据接口的时间
-    setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        movies: data.subjects,
-        total: data.total,
-      });
-    }, 1000);
+    // const data = require(`../test_data/${this.state.movieType}.json`);
+    // // 用定时器模拟请求数据接口的时间
+    // setTimeout(() => {
+    //   this.setState({
+    //     isLoading: false,
+    //     movies: data.subjects,
+    //     total: data.total,
+    //   });
+    // }, 1000);
   };
   // 那么实现【即将上映】【Top250】路由切换时，props属性发生改变（原因是this.props.match.params可以拿到路由参数。推理：路由变化，props必定发生变声）
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     console.log(nextProps.match.params);
     // 每当地址栏变化的时候，重置state中的参数项，重置完毕后，可以重新发起数据请求了
-    this.setState({
-      isLoading:true,//又要重新加载数据了
-      movieType:nextProps.match.params.type,//电影类型
-      nowPage:parseInt(nextProps.match.params.page)||1,//要来获取第几页的数据了
-    },function(){
-      this.loadMovieListByTypeAndPage();
-    });
+    this.setState(
+      {
+        isLoading: true, //又要重新加载数据了
+        movieType: nextProps.match.params.type, //电影类型
+        nowPage: parseInt(nextProps.match.params.page) || 1, //要来获取第几页的数据了
+      },
+      function () {
+        this.loadMovieListByTypeAndPage();
+      },
+    );
   }
   render() {
     return (
-      <div style={{height:'100%',maxHeight:'735px',overflow:'auto'}}>
+      <div style={{ height: '100%', maxHeight: '735px', overflow: 'auto' }}>
         {/* <h1>
-          这是MovieList组件---{this.props.match.params.type}---
-          {this.props.match.params.page}
-        </h1> */}
+        这是MovieList组件---{this.props.match.params.type}---
+        {this.props.match.params.page}
+      </h1> */}
         {this.renderList()}
       </div>
     );
@@ -111,12 +114,38 @@ export default class MovieList extends React.Component {
         </Spin>
       );
     } else {
-      return <div style={{width:'100%',display:'flex',flexDirection:'row',flexWrap:'wrap'}}>{
-      this.state.movies.map((item)=>{
-        return <MovieItem {...item} key={item.id}></MovieItem>;
-      })
-      }</div>;
+      return (
+        <div>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {this.state.movies.map((item) => {
+              return <MovieItem {...item} key={item.id}></MovieItem>;
+            })}
+          </div>
+          <Pagination
+            defaultCurrent={this.state.nowPage}
+            pageSize={this.state.pageSize}
+            total={this.state.total}
+            onChange={this.changePage}
+          />
+        </div>
+      );
     }
+  };
+  // 当页码改变的时候，加载新的页面数据
+  changePage = (page) => {
+    //page里面保存的就是当前点击的页码数
+    // 方式一：使用BOM实现页面跳转
+    // window.location.href = '/#/movie/' + this.state.movieType + '/' + page;
+    // 方式二(推荐使用)：由于手动使用了BOM对象，实现跳转，这种方式并不好，我们采用 编程式导航
+    console.log(this.props);//里面的history对象
+    // 使用react-router-dom实现编程式导航 前进 history下的goForward(),后退goBack()，或者go(-1),go(正数前进或负数后退)
+    this.props.history.push('/movie/' + this.state.movieType + '/' + page);
   };
 }
 // 获取数据的方式：

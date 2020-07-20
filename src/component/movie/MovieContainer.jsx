@@ -17,6 +17,7 @@ export default class Movie extends React.Component {
       <HashRouter>
         <Layout style={{ height: '100%' }}>
           <Sider width={200} className="site-layout-background">
+            {/* window.localtion.hash得到的是字符串  #/movie/in_theaters/1 ，用String的split方法转为数组*/}
             <Menu
               mode="inline"
               defaultSelectedKeys={[window.location.hash.split('/')[2]]}
