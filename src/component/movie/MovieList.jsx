@@ -50,30 +50,30 @@ export default class MovieList extends React.Component {
     //   console.log(result);
     // });
     // 1.适配不同类型的电影
-    const start = (this.state.nowPage - 1) * this.state.pageSize;
-    const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
-    fetchJSONP(url)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        // state值改变，要重新更新组件，将重新render函数
-        this.setState({
-          isLoading: false,//数据加载完成
-          movies: result.subjects,//为电影列表重新赋值
-          total: result.total,//电影列表中电影总条数
-        });
-      });
+    // const start = (this.state.nowPage - 1) * this.state.pageSize;
+    // const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
+    // fetchJSONP(url)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     console.log(result);
+    //     // state值改变，要重新更新组件，将重新render函数
+    //     this.setState({
+    //       isLoading: false,//数据加载完成
+    //       movies: result.subjects,//为电影列表重新赋值
+    //       total: result.total,//电影列表中电影总条数
+    //     });
+    //   });
 
     // 为避免超过appkey的使用次数，可以将拿到的数据存放.json文件中，作为测试使用
-    // const data = require('../test_data/in_theaters.json');
-    // // 用定时器模拟请求数据接口的时间
-    // setTimeout(() => {
-    //   this.setState({
-    //     isLoading: false,
-    //     movies: data.subjects,
-    //     total: data.total,
-    //   });
-    // }, 1000);
+    const data = require(`../test_data/${this.state.movieType}.json`);
+    // 用定时器模拟请求数据接口的时间
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+        movies: data.subjects,
+        total: data.total,
+      });
+    }, 1000);
   };
   // 那么实现【即将上映】【Top250】路由切换时，props属性发生改变（原因是this.props.match.params可以拿到路由参数。推理：路由变化，props必定发生变声）
   componentWillReceiveProps(nextProps){

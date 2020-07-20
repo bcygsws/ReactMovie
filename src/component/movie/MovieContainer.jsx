@@ -19,15 +19,15 @@ export default class Movie extends React.Component {
           <Sider width={200} className="site-layout-background">
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
+              defaultSelectedKeys={[window.location.hash.split('/')[2]]}
               style={{ height: '100%', borderRight: 0 }}>
-              <Menu.Item key="1">
+              <Menu.Item key="in_theaters">
                 <Link to="/movie/in_theaters/1"> 正在热映 </Link>
               </Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="coming_soon">
                 <Link to="/movie/coming_soon/1"> 即将上映 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="top250">
                 <Link to="/movie/top250/1"> Top250 </Link>
               </Menu.Item>
             </Menu>
