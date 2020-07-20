@@ -22,6 +22,7 @@ export default class MovieItem extends React.Component {
     // 注意在MovieList中直接为MovieItem添加onClick事件无效，想到直接在定义子组件的最外层div添加点击事件
     getDetail = () => {
         // console.log('ok');
+        // 在父组件MovieItem中，将history作为定义属性传过来，那么MovieItem也具有了history属性，里面有push方法
         console.log(this.props.history);
         console.log(this.props.id);
         // this.props.id从属性扩散中拿到值
