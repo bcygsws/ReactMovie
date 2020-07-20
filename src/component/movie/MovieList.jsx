@@ -1,7 +1,7 @@
 import React from 'react';
 // 导入 【加载中】特效组件 Spin
 import { Spin, Alert } from 'antd';
-// 导入fetch-jsonp
+// 导入fetch-jsonp，可以避开fetch请求时，出现的跨域问题。但是jsonp这种方式只适用于get请求
 import fetchJSONP from 'fetch-jsonp';
 // 导入电影显示区域组件MovieItem
 import MovieItem from './MovieItem.jsx';

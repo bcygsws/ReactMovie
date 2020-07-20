@@ -41,13 +41,10 @@ export default class Movie extends React.Component {
                 margin: 0,
                 minHeight: 280,
                 backgroundColor: '#fff',
-                height:'100%'
+                height: '100%',
               }}>
-              
-              {/* 在匹配路由规则中，有两个路由参数 */}
-              <Route path="/movie/:type/:page" component={MovieList}>
-                
-              </Route>
+              {/* 在匹配路由规则中，有两个路由参数，在MovieList组件中，可以通过props.match.params(在构造函数的state中)来获取路由参数，同理在组件其他地方，可以使用this.props.match.params */}
+              <Route path="/movie/:type/:page" component={MovieList}></Route>
             </Content>
           </Layout>
         </Layout>
