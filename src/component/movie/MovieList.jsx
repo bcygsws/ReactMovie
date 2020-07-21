@@ -20,6 +20,9 @@ export default class MovieList extends React.Component {
             movieType: props.match.params.type, //保存当前获取电影的内存
         };
     }
+    // 总结：React数据请求
+    // 1.初始默认数据请求在组件将要开始挂载阶段，即componentWillMount阶段
+    // 2.切换路由时，路由参数变化，会触发componentWillReceiveProps(nextProps)钩子
     // ajax等数据请求在这个生命周期开始请求
     componentWillMount() {
         //   用老数据接口来测试发现，第一个.then拿不到数据，只是返回了一个promise,这个promise(response)调用.json()方法并返回，再次.then才能拿到数据
@@ -50,32 +53,32 @@ export default class MovieList extends React.Component {
         //   console.log(result);
         // });
         // 1.适配不同类型的电影
-        const start = (this.state.nowPage - 1) * this.state.pageSize;
-        const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
-        fetchJSONP(url)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-                // state值改变，要重新更新组件，将重新render函数
-                this.setState({
-                    isLoading: false, //数据加载完成
-                    movies: result.subjects, //为电影列表重新赋值
-                    total: result.total, //电影列表中电影总条数
-                });
-            });
+        // const start = (this.state.nowPage - 1) * this.state.pageSize;
+        // const url = `http://api.douban.com/v2/movie/${this.state.movieType}?apikey=0df993c66c0c636e29ecbb5344252a4a&start=${start}&count=${this.state.pageSize}`;
+        // fetchJSONP(url)
+        //     .then(response => response.json())
+        //     .then(result => {
+        //         console.log(result);
+        //         // state值改变，要重新更新组件，将重新render函数
+        //         this.setState({
+        //             isLoading: false, //数据加载完成
+        //             movies: result.subjects, //为电影列表重新赋值
+        //             total: result.total, //电影列表中电影总条数
+        //         });
+        //     });
 
         // 为避免超过appkey的使用次数，可以将拿到的数据存放.json文件中，作为测试使用
-        // const data = require(`../test_data/${this.state.movieType}.json`);
-        // // 用定时器模拟请求数据接口的时间
-        // setTimeout(() => {
-        //   this.setState({
-        //     isLoading: false,
-        //     movies: data.subjects,
-        //     total: data.total,
-        //   });
-        // }, 1000);
+        const data = require(`../test_data/${this.state.movieType}.json`);
+        // 用定时器模拟请求数据接口的时间
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+            movies: data.subjects,
+            total: data.total,
+          });
+        }, 1000);
     };
-    // 那么实现【即将上映】【Top250】路由切换时，props属性发生改变（原因是this.props.match.params可以拿到路由参数。推理：路由变化，props必定发生变声）
+    // 那么实现【即将上映】【Top250】路由切换时，props属性发生改变（原因是this.props.match.params可以拿到路由参数。推理：路由变化，props必定发生变化，就一定会执行componentWillReceiveProps生命周期函数）
     componentWillReceiveProps(nextProps) {
         console.log(nextProps.match.params);
         // 每当地址栏变化的时候，重置state中的参数项，重置完毕后，可以重新发起数据请求了

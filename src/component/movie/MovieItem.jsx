@@ -24,7 +24,8 @@ export default class MovieItem extends React.Component {
         // console.log('ok');
         // 在父组件MovieItem中，将history作为定义属性传过来，那么MovieItem也具有了history属性，里面有push方法
         console.log(this.props.history);
-        console.log(this.props.id);
+        // 从属性扩散{...item}中拿到数据，直接this.props.id即可
+        console.log(this.props);
         // this.props.id从属性扩散中拿到值
         // this.props.history从自定义属性中拿到值
         this.props.history.push('/movie/detail/'+this.props.id);

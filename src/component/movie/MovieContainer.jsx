@@ -1,6 +1,6 @@
 import React from 'react';
 // 该组件里面涉及路由，需要先导入路由相关包
-import { HashRouter, Route, Link, Switch } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 // 导入布局需要的相关组件
 import { Layout, Menu } from 'antd';
 
@@ -24,6 +24,7 @@ export default class Movie extends React.Component {
                         defaultSelectedKeys={[window.location.hash.split('/')[2]]}
                         style={{ height: '100%', borderRight: 0 }}>
                         <Menu.Item key="in_theaters">
+                            {/* 在控制台可以看到下面语句解析成了 <a href="#/movie/in_theaters/1"></a> */}
                             <Link to="/movie/in_theaters/1"> 正在热映 </Link>
                         </Menu.Item>
                         <Menu.Item key="coming_soon">
