@@ -12,9 +12,9 @@ export default class MovieItem extends React.Component {
         return (
             <div className="box" onClick={this.getDetail}>
                 <img src={this.props.images.small} alt="" />
-                <h4>电影名称：{this.props.title}</h4>
-                <h4>上映年份：{this.props.year}</h4>
-                <h4>电影类型：{this.props.genres.join(',')}</h4>
+                {/*渲染数据来自其父组件MovieList的属性扩散{...item}，直接this.props.【键名称】来取值 */}
+                <h4> 电影名称： {this.props.title}</h4> <h4> 上映年份： {this.props.year} </h4>
+                <h4> 电影类型： {this.props.genres.join(',')} </h4>
                 <Rate disabled allowHalf defaultValue={this.props.rating.average / 2} />
             </div>
         );
@@ -28,6 +28,6 @@ export default class MovieItem extends React.Component {
         console.log(this.props);
         // this.props.id从属性扩散中拿到值
         // this.props.history从自定义属性中拿到值
-        this.props.history.push('/movie/detail/'+this.props.id);
+        this.props.history.push('/movie/detail/' + this.props.id);
     };
 }
