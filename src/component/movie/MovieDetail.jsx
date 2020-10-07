@@ -14,7 +14,8 @@ export default class extends React.Component {
     }
     // 请求数据
     componentWillMount() {
-        let url = `http://api.douban.com/v2/movie/subject/${this.props.match.params.id}?apikey=0df993c66c0c636e29ecbb5344252a4a`;
+        // 测试apikey 0df993c66c0c636e29ecbb5344252a4a 0b2bdeda43b5688921839c8ecb20399b
+        let url = `http://api.douban.com/v2/movie/subject/${this.props.match.params.id}?apikey= 0b2bdeda43b5688921839c8ecb20399b`;
         fetchJsonp(url)
             .then(response => {
                 return response.json();
