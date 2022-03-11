@@ -17,7 +17,7 @@ export default class MovieList extends React.Component {
             start: 0, //当前列表页条目开始的索引
             isLoading: true, //电影列表呈现前的加载特效，是否在加载？
             total: 0, //当前电影列表的总数量
-            movieType: props.match.params.type, //保存当前获取电影的内存
+            movieType: props.match.params.type, //保存当前获取电影的类型
         };
     }
     // 总结：React数据请求
@@ -151,10 +151,12 @@ export default class MovieList extends React.Component {
         // 方式一：使用BOM实现页面跳转
         // window.location.href = '/#/movie/' + this.state.movieType + '/' + page;
         // 方式二(推荐使用)：由于手动使用了BOM对象，实现跳转，这种方式并不好，我们采用 编程式导航
+	
         console.log(this.props); //里面的history对象
         // 使用react-router-dom实现编程式导航 前进 history下的goForward(),后退goBack()，或者go(-1),go(正数前进或负数后退)
         /* 切换分页时，路由地址变化，路由地址变化，props属性变化，推理出要执行.loadMovieListByTypeAndPage()方法 */
         this.props.history.push('/movie/' + this.state.movieType + '/' + page);
+		// 应该调用一下获取数据，原因是：
     };
 }
 // 获取数据的方式：
